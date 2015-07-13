@@ -5,13 +5,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public class TiledMapHelper {
     public static int getWidthInPixels(TiledMap map) {
-        int width = getPixelCountOfMapDimension(map, DimensionType.WIDTH);
-        return width;
+        int widthInPixels = getPixelCountOfMapDimension(map, DimensionType.WIDTH);
+        return widthInPixels;
     }
 
     public static int getHeightInPixels(TiledMap map) {
-        int height = getPixelCountOfMapDimension(map, DimensionType.HEIGHT);
-        return height;
+        int heightInPixels = getPixelCountOfMapDimension(map, DimensionType.HEIGHT);
+        return heightInPixels;
     }
 
     private static int getPixelCountOfMapDimension(TiledMap map, DimensionType dimensionType) {

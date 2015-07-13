@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -18,6 +19,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener {
     private final OrthographicCamera camera;
     private final TiledMap map;
     private final TiledMapRenderer mapRenderer;
+    private final Unit unit;
 
     public GameScreen(PrototypeGame game) {
         this.game = game;
@@ -25,6 +27,7 @@ public class GameScreen implements Screen, GestureDetector.GestureListener {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         map = new TmxMapLoader().load("example.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, game.SpriteBatch);
+        unit = new Unit(new Texture("Gobbe.png"));
         Gdx.input.setInputProcessor(new GestureDetector(this));
     }
 
@@ -38,6 +41,9 @@ public class GameScreen implements Screen, GestureDetector.GestureListener {
         camera.update();
         mapRenderer.setView(camera);
         mapRenderer.render();
+        game.SpriteBatch.begin();
+        unit.draw(game.SpriteBatch);
+        game.SpriteBatch.end();
     }
 
     @Override

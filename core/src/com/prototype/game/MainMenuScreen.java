@@ -14,11 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenuScreen implements Screen {
     private final PrototypeGame game;
-    private Stage stage;
+    private final Stage stage;
 
     public MainMenuScreen(PrototypeGame game) {
         this.game = game;
-        setupStage();
+        stage = new Stage();
+        stage.addActor(getNewGameButton());
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -27,7 +29,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        setBackgroundColor();
+        Gdx.gl.glClearColor(0, 0, 0.1f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
 
@@ -52,28 +55,17 @@ public class MainMenuScreen implements Screen {
         stage.dispose();
     }
 
-    private void setupStage() {
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
-        addNewGameButtonToStage();
-    }
-
-    private void setBackgroundColor() {
-        Gdx.gl.glClearColor(0, 0, 0.1f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
-
-    private void addNewGameButtonToStage() {
+    private TextButton getNewGameButton() {
         TextButton.TextButtonStyle buttonStyle = getTextButtonStyle();
-        TextButton button = new TextButton("New Game", buttonStyle);
-        button.setPosition(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2, Gdx.graphics.getHeight() / 2 - button.getHeight() / 2);
-        button.addListener(new ChangeListener() {
+        TextButton newGameButton = new TextButton("New Game", buttonStyle);
+        newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2);
+        newGameButton.addListener(new ChangeListener() {
             @Override
-            public void changed (ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new GameScreen(game));
             }
         });
-        stage.addActor(button);
+        return newGameButton;
     }
 
     private TextButton.TextButtonStyle getTextButtonStyle() {
