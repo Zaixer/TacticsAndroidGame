@@ -12,16 +12,13 @@ public class PrototypeGame extends Game {
 	public void create() {
 		SpriteBatch = new SpriteBatch();
         Font = new BitmapFont();
-		setScreen(new MainMenuScreen(this));
+        setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
-	public void render() {
-		super.render();
-	}
-
-    @Override
-	public void dispose() {
+	public void dispose () {
 		super.dispose();
+        SpriteBatch.dispose();
+		Font.dispose();
 	}
 }

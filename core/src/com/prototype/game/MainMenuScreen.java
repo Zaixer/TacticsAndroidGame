@@ -52,12 +52,10 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
     }
 
     private TextButton getNewGameButton() {
-        TextButton.TextButtonStyle buttonStyle = getTextButtonStyle();
-        TextButton newGameButton = new TextButton("New Game", buttonStyle);
+        TextButton newGameButton = new TextButton("New Game", getTextButtonStyle());
         newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2);
         newGameButton.addListener(new ChangeListener() {
             @Override

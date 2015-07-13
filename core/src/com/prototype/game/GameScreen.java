@@ -11,14 +11,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
-public class GameScreen implements Screen, GestureDetector.GestureListener {
+public class GameScreen implements Screen {
     private static final float PAN_SPEED_FACTOR = 0.5f;
     private final PrototypeGame game;
     private final OrthographicCamera camera;
     private final TiledMap map;
     private final TiledMapRenderer mapRenderer;
+    private final int mapWidthInPixels;
+    private final int mapHeightInPixels;
     private final Unit unit;
 
     public GameScreen(PrototypeGame game) {
@@ -27,8 +28,10 @@ public class GameScreen implements Screen, GestureDetector.GestureListener {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         map = new TmxMapLoader().load("example.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, game.SpriteBatch);
+        mapWidthInPixels = TiledMapHelper.getWidthInPixels(map);
+        mapHeightInPixels = TiledMapHelper.getHeightInPixels(map);
         unit = new Unit(new Texture("Gobbe.png"));
-        Gdx.input.setInputProcessor(new GestureDetector(this));
+        Gdx.input.setInputProcessor(new GestureDetector(new GestureAdapter()));
     }
 
     @Override
@@ -64,53 +67,25 @@ public class GameScreen implements Screen, GestureDetector.GestureListener {
 
     @Override
     public void dispose() {
-        map.dispose();
     }
 
-    @Override
-    public boolean touchDown(float x, float y, int pointer, int button) {
-        return false;
-    }
+    private class GestureAdapter extends GestureDetector.GestureAdapter {
+        @Override
+        public boolean tap (float x, float y, int count, int button) {
+            unit.setCenter(x + CameraHelper.getOffsetX(camera), camera.viewportHeight - y + CameraHelper.getOffsetY(camera));
+            return false;
+        }
 
-    @Override
-    public boolean tap(float x, float y, int count, int button) {
-        return false;
-    }
+        @Override
+        public boolean pan(float x, float y, float deltaX, float deltaY) {
+            camera.translate(-deltaX * PAN_SPEED_FACTOR, deltaY * PAN_SPEED_FACTOR);
+            ensureThatCameraIsWithinMap();
+            return false;
+        }
 
-    @Override
-    public boolean longPress(float x, float y) {
-        return false;
-    }
-
-    @Override
-    public boolean fling(float velocityX, float velocityY, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean pan(float x, float y, float deltaX, float deltaY) {
-        camera.translate(-deltaX * PAN_SPEED_FACTOR, deltaY * PAN_SPEED_FACTOR);
-        ensureThatCameraIsWithinMap();
-        return false;
-    }
-
-    @Override
-    public boolean panStop(float x, float y, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean zoom(float initialDistance, float distance) {
-        return false;
-    }
-
-    @Override
-    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-        return false;
-    }
-
-    private void ensureThatCameraIsWithinMap() {
-        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, TiledMapHelper.getWidthInPixels(map) - camera.viewportWidth / 2);
-        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, TiledMapHelper.getHeightInPixels(map) - camera.viewportHeight / 2);
+        private void ensureThatCameraIsWithinMap() {
+            camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidthInPixels - camera.viewportWidth / 2);
+            camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeightInPixels - camera.viewportHeight / 2);
+        }
     }
 }
