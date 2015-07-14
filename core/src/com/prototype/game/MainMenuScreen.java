@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,14 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MainMenuScreen implements Screen {
     private final PrototypeGame game;
     private final Stage stage;
+    private final OrthographicCamera camera;
 
     public MainMenuScreen(PrototypeGame game) {
         this.game = game;
-        stage = new Stage();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false);
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera), game.SpriteBatch);
         stage.addActor(getNewGameButton());
         Gdx.input.setInputProcessor(stage);
     }

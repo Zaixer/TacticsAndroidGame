@@ -1,6 +1,5 @@
 package com.prototype.game;
 
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public class TiledMapHelper {
@@ -29,9 +28,8 @@ public class TiledMapHelper {
             default:
                 return 0;
         }
-        MapProperties properties = map.getProperties();
-        int tileCount = properties.get(tileCountPropertyName, Integer.class);
-        int tilePixelCount = properties.get(tilePixelCountPropertyName, Integer.class);
+        int tileCount = map.getProperties().get(tileCountPropertyName, Integer.class);
+        int tilePixelCount = map.getProperties().get(tilePixelCountPropertyName, Integer.class);
         int pixelCountOfMapDimension = tileCount * tilePixelCount;
         return pixelCountOfMapDimension;
     }
