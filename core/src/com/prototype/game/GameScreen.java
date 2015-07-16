@@ -101,11 +101,19 @@ public class GameScreen implements Screen {
     }
 
     private class TileClickedCallback implements ITileClickedCallback {
+        private static final float MOVE_DISTANCE_PER_SECOND = 64;
+
         @Override
         public void onClick(Actor tileActor) {
             for (UnitActor unitActor : unitActors) {
-                unitActor.addAction(Actions.moveTo(tileActor.getX(), tileActor.getY(), 5));
+                unitActor.addAction(Actions.moveTo(tileActor.getX(), tileActor.getY(), getMoveDuration(unitActor, tileActor)));
             }
+        }
+
+        private final float getMoveDuration(UnitActor unitActor, Actor tileActor) {
+            float moveDistance = (float)Math.sqrt(Math.pow(tileActor.getX() - unitActor.getX(), 2) + Math.pow(tileActor.getY() - unitActor.getY(), 2));
+            float moveDuration = moveDistance / MOVE_DISTANCE_PER_SECOND;
+            return moveDuration;
         }
     }
 
