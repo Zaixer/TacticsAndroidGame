@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class UnitActor extends Actor {
+public abstract class UnitActor extends Actor {
     private final Sprite sprite;
 
-    public UnitActor(Sprite sprite) {
+    public UnitActor() {
         super();
-        this.sprite = sprite;
+        sprite = getSprite();
         setSize(sprite.getWidth(), sprite.getHeight());
     }
 
@@ -18,4 +18,8 @@ public class UnitActor extends Actor {
         batch.setColor(getColor().r, getColor().g, getColor().b, getColor().a * parentAlpha);
         batch.draw(sprite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
+
+    public abstract int getMoveDistance();
+
+    protected abstract Sprite getSprite();
 }

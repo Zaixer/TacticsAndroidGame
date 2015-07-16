@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -24,7 +25,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera), game.SpriteBatch);
-        stage.addActor(getNewGameButton());
+        stage.addActor(getNewGameButton(game));
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -59,8 +60,8 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
     }
 
-    private TextButton getNewGameButton() {
-        TextButton newGameButton = new TextButton("New Game", getTextButtonStyle());
+    private TextButton getNewGameButton(final PrototypeGame game) {
+        TextButton newGameButton = new TextButton("New Game", getTextButtonStyle(game.Font));
         newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2);
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -71,14 +72,14 @@ public class MainMenuScreen implements Screen {
         return newGameButton;
     }
 
-    private TextButton.TextButtonStyle getTextButtonStyle() {
+    private TextButton.TextButtonStyle getTextButtonStyle(BitmapFont font) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(200, 100, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.GREEN);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = game.Font;
+        textButtonStyle.font = font;
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
         return textButtonStyle;
